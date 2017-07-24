@@ -312,7 +312,7 @@ table {
 </style>
 <template>
   <div class="cov-vue-date">
-    <div :class="['datepickbox', 'input-group', option.wrapperClass ? option.wrapperClass : '']">
+    <div :class="['datepickbox', { option.wrapperClass: option.wrapperClass }]">
       <input type="text" title="input date" class="cov-datepicker" readonly="readonly" :placeholder="option.placeholder" v-model="date.time" :required="required" @click="showCheck" @focus="showCheck" :style="option.inputStyle ? option.inputStyle : {}" :class="option.inputClass ? option.inputClass : {}"/>
       <span @click="showCheck" class="input-group-addon">
         <span class="glyphicon glyphicon-calendar"></span>
