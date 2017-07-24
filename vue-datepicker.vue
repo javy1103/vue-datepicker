@@ -315,8 +315,8 @@ table {
   <div class="cov-vue-date" :class="option.wrapperClass ? option.wrapperClass : {}">
     <div class="datepickbox input-group">
       <input type="text" title="input date" class="cov-datepicker" readonly="readonly" :placeholder="option.placeholder" v-model="date.time" :required="required" @click="showCheck" @focus="showCheck" :style="option.inputStyle ? option.inputStyle : {}" :class="option.inputClass ? option.inputClass : {}"/>
-      <span class="input-group-addon">
-        <span @click="showInfo.check = true" class="glyphicon glyphicon-calendar"></span>
+      <span @click="showCheck" class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
       </span>
     </div>
     <div class="datepicker-overlay" v-if="showInfo.check" @click="dismiss($event)" v-bind:style="{'background' : option.overlayOpacity? 'rgba(0,0,0,'+option.overlayOpacity+')' : 'rgba(0,0,0,0.5)'}">
@@ -590,7 +590,7 @@ exports.default = {
           value: _i2,
           inMonth: false,
           action: 'next',
-          unavailable: false,
+          unavailable: true,
           checked: false,
           moment: (0, _moment2.default)(currentMoment).add(1, 'months').date(_i2)
         };
