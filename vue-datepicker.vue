@@ -313,8 +313,11 @@ table {
 </style>
 <template>
   <div class="cov-vue-date" :class="option.wrapperClass ? option.wrapperClass : {}">
-    <div class="datepickbox">
+    <div class="datepickbox input-group">
       <input type="text" title="input date" class="cov-datepicker" readonly="readonly" :placeholder="option.placeholder" v-model="date.time" :required="required" @click="showCheck" @focus="showCheck" :style="option.inputStyle ? option.inputStyle : {}" :class="option.inputClass ? option.inputClass : {}"/>
+      <span class="input-group-addon">
+        <span @click="showInfo.check = true" class="glyphicon glyphicon-calendar"></span>
+      </span>
     </div>
     <div class="datepicker-overlay" v-if="showInfo.check" @click="dismiss($event)" v-bind:style="{'background' : option.overlayOpacity? 'rgba(0,0,0,'+option.overlayOpacity+')' : 'rgba(0,0,0,0.5)'}">
       <div class="cov-date-body" :style="{'background-color': option.color ? option.color.header : '#3f51b5'}">
@@ -542,7 +545,7 @@ exports.default = {
           value: previousMonth.daysInMonth() - _i,
           inMonth: false,
           action: 'previous',
-          unavailable: false,
+          unavailable: true,
           checked: false,
           moment: (0, _moment2.default)(currentMoment).date(1).subtract(_i + 1, 'days')
         };
