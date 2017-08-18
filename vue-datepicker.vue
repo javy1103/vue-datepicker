@@ -313,7 +313,7 @@ table {
 <template>
   <div class="cov-vue-date">
     <div :class="['datepickbox', option.wrapperClass ? option.wrapperClass : '']">
-      <input type="text" title="input date" class="cov-datepicker" readonly="readonly" :placeholder="option.placeholder" v-model="date.time" :required="required" @click="showCheck" @focus="showCheck" :style="option.inputStyle ? option.inputStyle : {}" :class="option.inputClass ? option.inputClass : {}"/>
+      <input type="text" title="input date" class="cov-datepicker" readonly="readonly" :placeholder="option.placeholder" v-model="currentValue" :required="required" @click="showCheck" @focus="showCheck" :style="option.inputStyle ? option.inputStyle : {}" :class="option.inputClass ? option.inputClass : {}"/>
       <span @click="showCheck" class="input-group-addon">
         <span class="glyphicon glyphicon-calendar"></span>
       </span>
@@ -386,10 +386,10 @@ var _moment2 = _interopRequireDefault(_moment);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+
   props: {
     required: false,
-    date: {
-      type: Object,
+    value: {
       required: true
     },
     option: {
@@ -435,7 +435,8 @@ exports.default = {
       }
     }
   },
-  data: function data() {
+
+  data() {
     function hours() {
       var list = [];
       var hour = 24;
@@ -461,6 +462,7 @@ exports.default = {
       return list;
     }
     return {
+      currentValue: this.value,
       hours: hours(),
       mins: mins(),
       showInfo: {
@@ -493,16 +495,16 @@ exports.default = {
   },
 
   methods: {
-    pad: function pad(n) {
+    pad(n) {
       n = Math.floor(n);
       return n < 10 ? '0' + n : n;
     },
-    nextMonth: function nextMonth(type) {
+    nextMonth(type) {
       var next = null;
       type === 'next' ? next = (0, _moment2.default)(this.checked.currentMoment).add(1, 'M') : next = (0, _moment2.default)(this.checked.currentMoment).add(-1, 'M');
       this.showDay(next);
     },
-    showDay: function showDay(time) {
+    showDay(time) {
       if (time === undefined || !(0, _moment2.default)(time, this.option.format).isValid()) {
         this.checked.currentMoment = (0, _moment2.default)();
       } else {
@@ -596,7 +598,7 @@ exports.default = {
       }
       this.dayList = days;
     },
-    checkBySelectDays: function checkBySelectDays(d, days) {
+    checkBySelectDays(d, days) {
       var _this = this;
 
       this.selectedDays.forEach(function (day) {
@@ -605,7 +607,7 @@ exports.default = {
         }
       });
     },
-    limitWeekDay: function limitWeekDay(limit, days) {
+    limitWeekDay(limit, days) {
       days.map(function (day) {
         if (limit.available.indexOf(Math.floor(day.moment.format('d'))) === -1) {
           day.unavailable = true;
@@ -613,7 +615,7 @@ exports.default = {
       });
       return days;
     },
-    limitFromTo: function limitFromTo(limit, days) {
+    limitFromTo(limit, days) {
       var _this2 = this;
 
       if (limit.from || limit.to) {
@@ -625,7 +627,7 @@ exports.default = {
       }
       return days;
     },
-    getLimitCondition: function getLimitCondition(limit, day) {
+    getLimitCondition(limit, day) {
       var tmpMoment = (0, _moment2.default)(this.checked.year + '-' + this.pad(this.checked.month) + '-' + this.pad(day.value));
       if (limit.from && !limit.to) {
         return !tmpMoment.isAfter(limit.from);
@@ -635,7 +637,7 @@ exports.default = {
         return !tmpMoment.isBetween(limit.from, limit.to);
       }
     },
-    checkDay: function checkDay(obj) {
+    checkDay(obj) {
       if (obj.unavailable || obj.value === '') {
         return false;
       }
@@ -671,7 +673,7 @@ exports.default = {
           break;
       }
     },
-    showYear: function showYear() {
+    showYear() {
       var _this3 = this;
 
       var year = (0, _moment2.default)(this.checked.currentMoment).year();
@@ -688,7 +690,7 @@ exports.default = {
         _this3.addYear();
       });
     },
-    showOne: function showOne(type) {
+    showOne(type) {
       switch (type) {
         case 'year':
           this.showInfo.hour = false;
@@ -721,10 +723,10 @@ exports.default = {
           this.showInfo.hour = false;
       }
     },
-    showMonth: function showMonth() {
+    showMonth() {
       this.showOne('month');
     },
-    addYear: function addYear() {
+    addYear() {
       var _this4 = this;
 
       var listDom = document.getElementById('yearList');
@@ -736,11 +738,11 @@ exports.default = {
         }
       }, false);
     },
-    setYear: function setYear(year) {
+    setYear(year) {
       this.checked.currentMoment = (0, _moment2.default)(year + '-' + this.checked.month + '-' + this.checked.day);
       this.showDay(this.checked.currentMoment);
     },
-    setMonth: function setMonth(month) {
+    setMonth(month) {
       var mo = this.library.month.indexOf(month) + 1;
       if (mo < 10) {
         mo = '0' + '' + mo;
@@ -748,15 +750,15 @@ exports.default = {
       this.checked.currentMoment = (0, _moment2.default)(this.checked.year + '-' + mo + '-' + this.checked.day);
       this.showDay(this.checked.currentMoment);
     },
-    showCheck: function showCheck() {
-      if (this.date.time === '') {
+    showCheck() {
+      if (this.currentValue === '') {
         this.showDay();
       } else {
         if (this.option.type === 'day' || this.option.type === 'min') {
-          this.checked.oldtime = this.date.time;
-          this.showDay(this.date.time);
+          this.checked.oldtime = this.currentValue;
+          this.showDay(this.currentValue);
         } else {
-          this.selectedDays = JSON.parse(this.date.time);
+          this.selectedDays = JSON.parse(this.currentValue);
           if (this.selectedDays.length) {
             this.checked.oldtime = this.selectedDays[0];
             this.showDay(this.selectedDays[0]);
@@ -767,7 +769,7 @@ exports.default = {
       }
       this.showInfo.check = true;
     },
-    setTime: function setTime(type, obj, list) {
+    setTime(type, obj, list) {
       var _iteratorNormalCompletion2 = true;
       var _didIteratorError2 = false;
       var _iteratorError2 = undefined;
@@ -797,18 +799,19 @@ exports.default = {
         }
       }
     },
-    picked: function picked() {
+    picked() {
+
       if (this.option.type === 'day' || this.option.type === 'min') {
         var ctime = this.checked.year + '-' + this.checked.month + '-' + this.checked.day + ' ' + this.checked.hour + ':' + this.checked.min;
         this.checked.currentMoment = (0, _moment2.default)(ctime, 'YYYY-MM-DD HH:mm');
-        this.date.time = (0, _moment2.default)(this.checked.currentMoment).format(this.option.format);
+        this.currentValue = (0, _moment2.default)(this.checked.currentMoment).format(this.option.format);
       } else {
-        this.date.time = JSON.stringify(this.selectedDays);
+        this.currentValue = JSON.stringify(this.selectedDays);
       }
       this.showInfo.check = false;
-      this.$emit('change', this.date.time);
+      this.$emit('input', this.currentValue);
     },
-    dismiss: function dismiss(evt) {
+    dismiss(evt) {
       if (evt.target.className === 'datepicker-overlay') {
         if (this.option.dismissible === undefined || this.option.dismissible) {
           this.showInfo.check = false;
@@ -816,7 +819,7 @@ exports.default = {
         }
       }
     },
-    shiftActTime: function shiftActTime() {
+    shiftActTime() {
       // shift activated time items to visible position.
       this.$nextTick(function () {
         if (!document.querySelector('.hour-item.active')) {
@@ -826,6 +829,13 @@ exports.default = {
         document.querySelector('.min-box').scrollTop = (document.querySelector('.min-item.active').offsetTop || 0) - 250;
       });
     }
+  },
+
+  watch: {
+    value(newValue) {
+      this.currentValue = newValue
+    }
   }
+
 };
 </script>
