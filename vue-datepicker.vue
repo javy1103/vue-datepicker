@@ -250,7 +250,6 @@ table {
   padding: 0;
 }
 .cov-vue-date {
-  display: inline-block;
   color: #5D5D5D;
 }
 .button-box {
@@ -308,6 +307,9 @@ table {
 ::-webkit-scrollbar-thumb {
   background: #C1C1C1;
   border-radius: 2px;
+}
+.cov-datepicker {
+    background-color: white !important;
 }
 </style>
 <template>
